@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Study Plans</title>
+</head>
+<body>
+<h1>Your Study Plans</h1>
+
+<ul>
+    <li th:each="plan : ${studyPlans}">
+        <a th:href="@{/study-plans/{id}(id=${plan.id})}" th:text="${plan.title}">Study Plan Title</a>
+        <span th:text="'Created on: ' + ${#dates.format(plan.creationDate, 'yyyy-MM-dd')}">Created on:</span>
+    </li>
+</ul>
+
+<a href="/study-plans/create">Create a New Study Plan</a>
+</body>
+</html>

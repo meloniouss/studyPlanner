@@ -1,4 +1,4 @@
-package UserJv;
+package studyplanner.studyplan;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

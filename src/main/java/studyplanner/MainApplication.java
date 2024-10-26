@@ -1,4 +1,4 @@
-package UserJv;
+package studyplanner;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,4 +9,7 @@ public class MainApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MainApplication.class, args);
 	}
+	//service -> interacts with DB (data layer)
+	//entity -> kind of like an object in the database
+	//controller -> handle HTTP requests, interact with services, and return responses.
 }

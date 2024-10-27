@@ -5,6 +5,12 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# Ignore the application.properties file specifically
+/src/main/resources/application.properties
+
+# Allow all other files in src to be tracked
+!/src/**/*
+
 ### STS ###
 .apt_generated
 .classpath

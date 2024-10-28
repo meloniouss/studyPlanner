@@ -8,6 +8,7 @@ public class User { //basically the values in the database
 
     @Id
     @Column(nullable = false, unique = true)
+    @GeneratedValue(strategy =GenerationType.IDENTITY)
     private Long id;
     private String email;
     private String name;
@@ -49,5 +50,14 @@ public class User { //basically the values in the database
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

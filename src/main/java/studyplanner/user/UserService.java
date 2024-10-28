@@ -31,9 +31,7 @@ public class UserService {
     }
 
     private User createUser(OAuth2User oauthUser) {
-        System.out.println("creating user");
         try {
-            System.out.println("creating user");
             Optional<User> userOptional = userRepository.findByEmail(oauthUser.getAttribute("email"));
             if(userOptional.isPresent()){
                 throw new IllegalStateException("E-mail taken");
@@ -42,9 +40,7 @@ public class UserService {
             User user = new User(oauthUser.getAttribute("email"), oauthUser.getAttribute("name"));
             user.setEmail(oauthUser.getAttribute("email"));
             user.setName(oauthUser.getAttribute("name"));
-            System.out.println(user.getName());
-            System.out.println(user.getEmail());
-            System.out.println("user found and or created.");
+            System.out.println(user);
             return userRepository.save(user); // we are saving our new user here.
         } catch (IllegalStateException e) {
             throw new RuntimeException(e);

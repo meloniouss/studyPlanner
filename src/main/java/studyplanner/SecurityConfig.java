@@ -26,10 +26,12 @@ import studyplanner.CustomOAuth2LoginSuccessHandler;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@CrossOrigin("http://localhost:3000/")
 public class SecurityConfig {
 
     private final CustomOAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler;
@@ -60,7 +62,6 @@ public class SecurityConfig {
                             @Override
                             public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                                 response.setStatus(HttpServletResponse.SC_OK);
-                                response.sendRedirect("http://localhost:3000/");
                                 System.out.println(response);
                                 System.out.println("logout done");
                             }
@@ -73,8 +74,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

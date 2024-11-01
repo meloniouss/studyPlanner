@@ -22,7 +22,6 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    //must add UPDATE endpoint as well
 
     // endpoint to delete a user by ID
     @DeleteMapping("/{id}")

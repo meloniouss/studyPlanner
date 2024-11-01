@@ -48,7 +48,18 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         cookie.setPath("/");
         cookie.setHttpOnly(false);
         cookie.setSecure(true); // Use true if using HTTPS
+
+        // Create user ID cookie
+        Cookie userIdCookie = new Cookie("userId", String.valueOf(currentUser.getId()));
+        userIdCookie.setPath("/");
+        userIdCookie.setHttpOnly(true);
+        userIdCookie.setSecure(true);
+        userIdCookie.setMaxAge(3600);
+
+
         response.addCookie(cookie);
+        response.addCookie(userIdCookie);
+
         response.sendRedirect("http://localhost:3000/");
 
     }

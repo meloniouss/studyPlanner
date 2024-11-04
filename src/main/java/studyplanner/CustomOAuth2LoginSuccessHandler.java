@@ -52,7 +52,7 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         // Create user ID cookie
         Cookie userIdCookie = new Cookie("userId", String.valueOf(currentUser.getId()));
         userIdCookie.setPath("/");
-        userIdCookie.setHttpOnly(true);
+        userIdCookie.setHttpOnly(false);
         userIdCookie.setSecure(true);
         userIdCookie.setMaxAge(3600);
 
@@ -60,6 +60,7 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         response.addCookie(cookie);
         response.addCookie(userIdCookie);
 
+        request.getSession().setAttribute("user", currentUser);
         response.sendRedirect("http://localhost:3000/");
 
     }
@@ -68,9 +69,10 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         return JWT.create()
                 .withSubject(userId)
                 .withClaim("email", userEmail)
+                .withClaim("userId", userId)
                 .withIssuer("Taskly")
-                .withExpiresAt(new Date(System.currentTimeMillis() + 86400000)) // Expires in 1 day
-                .sign(Algorithm.HMAC256(secretKey)); // Sign with the secret key
+                .withExpiresAt(new Date(System.currentTimeMillis() + 86400000))
+                .sign(Algorithm.HMAC256(secretKey));
     }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -50,13 +51,15 @@ public class SecurityConfig {
         return http
 
                 .csrf(AbstractHttpConfigurer::disable)
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/otherpage", "/logout", "/login", "/oauth2/**").permitAll() // Allow public access to login and OAuth2 endpoints MAYBE DOUBLE CHECK IF THIS IS NECESSARY?
-                        .anyRequest().authenticated() // Require authentication for all other requests
+                        .requestMatchers("/", "/auth/oauth",  "/login", "/oauth2/**").permitAll() // Allow public access to login and OAuth2 endpoints MAYBE DOUBLE CHECK IF THIS IS NECESSARY
+                        .requestMatchers("/courses", "/otherpage", "/logout").authenticated()
                 )
                 .oauth2Login(oauth2 -> {
                     oauth2.successHandler(customOAuth2LoginSuccessHandler); // Your success handler
                 })
+
                 .logout(logout -> logout
                         .logoutSuccessHandler(new LogoutSuccessHandler() {
                             @Override
@@ -68,6 +71,9 @@ public class SecurityConfig {
                         }
                 ))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Use session if needed
+                )
                 .build();
     }
 
@@ -77,7 +83,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

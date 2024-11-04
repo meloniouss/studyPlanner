@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import studyplanner.user.User;
 
 @Entity
+@Table(name = "course")
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

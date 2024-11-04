@@ -15,7 +15,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-
+    public User findById(Long id) {
+        return userRepository.findById(id).orElse(null); // Returns null if not found
+    }
 
     public User findOrCreateUser(OAuth2User oauthUser) {
         try {

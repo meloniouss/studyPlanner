@@ -16,7 +16,6 @@ public class CourseService {
     }
     //Create,read,update,delete
     public Course createCourse(Course newCourse){
-
         return courseRepository.save(newCourse);
     }
 

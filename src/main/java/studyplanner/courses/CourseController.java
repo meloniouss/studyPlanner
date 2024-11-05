@@ -40,6 +40,7 @@ public class CourseController {
 
     @GetMapping() //Read
     public ResponseEntity<List<Course>> getCoursesByUserId(@CookieValue("userId") Long userId) {
+    System.out.println("getting courses");
         List<Course> courses = courseService.getAllCoursesByUserId(userId);
         if (courses.isEmpty()) {
             return ResponseEntity.noContent().build(); // No content found, it sends an OK request but that is it

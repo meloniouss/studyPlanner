@@ -54,7 +54,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/auth/oauth",  "/login", "/oauth2/**").permitAll() // Allow public access to login and OAuth2 endpoints MAYBE DOUBLE CHECK IF THIS IS NECESSARY
-                        .requestMatchers("/courses", "/otherpage", "/logout").authenticated()
+                        .requestMatchers("/courses", "/otherpage", "/logout", "/courses/**").authenticated()
                 )
                 .oauth2Login(oauth2 -> {
                     oauth2.successHandler(customOAuth2LoginSuccessHandler); // Your success handler

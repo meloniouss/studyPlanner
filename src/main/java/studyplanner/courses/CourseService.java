@@ -38,4 +38,8 @@ public class CourseService {
         courseRepository.deleteById(id);
     }
 
+    public List<Course> getAllCoursesByOauth2UserId(String oauth2UserId) {
+        System.out.println(oauth2UserId);
+        return courseRepository.findByUser_Oauth2UserId(oauth2UserId);
+    }
 }

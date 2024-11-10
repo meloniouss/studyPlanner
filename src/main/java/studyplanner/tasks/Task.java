@@ -2,6 +2,7 @@ package studyplanner.tasks;
 import jakarta.persistence.*;
 import studyplanner.courses.Course;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Entity
 @Table(name = "task")
@@ -11,13 +12,13 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "task_name", nullable = false)
+    @Column(name = "task_name", nullable = true)
     private String taskName;
 
-    @Column(name = "is_done", nullable = false)
+    @Column(name = "is_done", nullable = true)
     private Boolean isDone;
 
-    @Column(name = "due_date", nullable = false)
+    @Column(name = "due_date", nullable = true)
     private LocalDate dueDate;
 
     @Column(name = "task_description")

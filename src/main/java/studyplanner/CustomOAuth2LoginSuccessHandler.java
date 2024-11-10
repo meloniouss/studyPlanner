@@ -1,5 +1,6 @@
 package studyplanner;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -16,9 +18,9 @@ import studyplanner.user.User;
 import studyplanner.user.UserService;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
@@ -43,36 +45,26 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         User currentUser = userService.findOrCreateUser(oAuth2User);
         System.out.println("Authentication successful! Redirecting to /otherpage.");
 
-        String token = generateToken(currentUser.getName(), currentUser.getEmail());
+        String token = generateToken(currentUser.getName(), currentUser.getEmail(), currentUser.getId());
+        // Create the HTTP-only cookie
         Cookie cookie = new Cookie("sessionToken", token);
-        cookie.setPath("/");
-        cookie.setHttpOnly(false);
-        cookie.setSecure(true); // Use true if using HTTPS
+        cookie.setHttpOnly(false); // Prevents JavaScript access
+        cookie.setSecure(false); // Ensures the cookie is sent over HTTPS only (should be true in production)
+        cookie.setPath("/"); // Ensures the cookie is available site-wide
+        cookie.setMaxAge(60 * 60 * 24); // Optional: Set the expiration time (1 day in this case)
 
-        // Create user ID cookie
-        Cookie userIdCookie = new Cookie("userId", String.valueOf(currentUser.getId()));
-        userIdCookie.setPath("/");
-        userIdCookie.setHttpOnly(false);
-        userIdCookie.setSecure(true);
-        userIdCookie.setMaxAge(3600);
-
-
-        response.addCookie(cookie);
-        response.addCookie(userIdCookie);
-
-        request.getSession().setAttribute("user", currentUser);
-        response.sendRedirect("http://localhost:3000/");
-
+        response.addCookie(cookie); // Add the cookie to the response
+        response.sendRedirect("http://localhost:3000"); // Redirect after setting the cookie
     }
 
-    public String generateToken(String userId, String userEmail) {
+    public String generateToken(String userId, String userEmail, Long userIdNumber) {
         return JWT.create()
                 .withSubject(userId)
                 .withClaim("email", userEmail)
-                .withClaim("userId", userId)
+                .withClaim("userId", userIdNumber)
                 .withIssuer("Taskly")
                 .withExpiresAt(new Date(System.currentTimeMillis() + 86400000))
-                .sign(Algorithm.HMAC256(secretKey));
+                .sign(Algorithm.HMAC256(secretKey.getBytes(StandardCharsets.UTF_8)));
     }
 
 }

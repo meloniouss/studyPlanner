@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -49,15 +50,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/auth/oauth",  "/login", "/oauth2/**").permitAll() // Allow public access to login and OAuth2 endpoints MAYBE DOUBLE CHECK IF THIS IS NECESSARY
-                        .requestMatchers("/courses", "/otherpage", "/logout", "/courses/**").authenticated()
+                        .requestMatchers("/courses", "/otherpage", "/logout", "/courses/**", "/courses/* /tasks", "/courses/* /tasks/**").authenticated()
+                        .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> {
                     oauth2.successHandler(customOAuth2LoginSuccessHandler); // Your success handler
+
                 })
 
                 .logout(logout -> logout

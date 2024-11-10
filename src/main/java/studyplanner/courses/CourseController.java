@@ -4,6 +4,8 @@ package studyplanner.courses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import studyplanner.user.User;
 import studyplanner.user.UserService;
@@ -39,9 +41,10 @@ public class CourseController {
     }
 
     @GetMapping() //Read
-    public ResponseEntity<List<Course>> getCoursesByUserId(@CookieValue("userId") Long userId) {
+    public ResponseEntity<List<Course>> getCoursesByUserId(@AuthenticationPrincipal OAuth2User oauth2User) {
     System.out.println("getting courses");
-        List<Course> courses = courseService.getAllCoursesByUserId(userId);
+        String oauth2UserId = oauth2User.getAttribute("sub");
+        List<Course> courses = courseService.getAllCoursesByOauth2UserId(oauth2UserId);
         if (courses.isEmpty()) {
             return ResponseEntity.noContent().build(); // No content found, it sends an OK request but that is it
         }

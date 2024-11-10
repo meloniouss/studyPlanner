@@ -12,22 +12,33 @@ public class User { //basically the values in the database
     private Long id;
     private String email;
     private String name;
+    @Column(name = "oauth2_user_id", unique = true)
+    private String oauth2UserId; // New field to store OAuth2 user ID
 
-    public User(Long id, String email, String name) {
+    // Constructors, getters, setters
+    public User(Long id, String email, String name, String oauth2UserId) {
         this.id = id;
         this.email = email;
         this.name = name;
+        this.oauth2UserId = oauth2UserId;
     }
 
-    public User(String email, String name) {
+    public User(String email, String name, String oauth2UserId) {
         this.email = email;
         this.name = name;
+        this.oauth2UserId = oauth2UserId;
     }
 
-    public User() {
+    public User() {}
 
+    // Getters and setters for new field
+    public String getOauth2UserId() {
+        return oauth2UserId;
     }
 
+    public void setOauth2UserId(String oauth2UserId) {
+        this.oauth2UserId = oauth2UserId;
+    }
     public Long getId() {
         return id;
     }

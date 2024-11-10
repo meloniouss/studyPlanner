@@ -34,7 +34,9 @@ public class TaskService {
         task.setTaskDescription(taskDetails.getTaskDescription());
         return taskRepository.save(task);
     }
-
+    public List<Task> updateTasks(List<Task> tasks) {
+        return taskRepository.saveAll(tasks); // Batch save for updates
+    }
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
     }

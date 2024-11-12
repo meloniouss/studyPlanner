@@ -3,6 +3,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -35,7 +36,16 @@ public class TaskService {
         return taskRepository.save(task);
     }
     public List<Task> updateTasks(List<Task> tasks) {
-        return taskRepository.saveAll(tasks); // Batch save for updates
+        List<Task> tasksToSave = tasks.stream()
+                .filter(task -> !task.getIsDone())
+                .collect(Collectors.toList());
+
+        List<Task> tasksToDelete = tasks.stream()
+                .filter(Task::getIsDone)
+                .collect(Collectors.toList());
+
+        taskRepository.deleteAll(tasksToDelete);
+        return taskRepository.saveAll(tasksToSave);
     }
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);

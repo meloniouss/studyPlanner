@@ -27,11 +27,11 @@ public class CourseController {
         this.userService = userService;
     }
 
-    @PostMapping //Create
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+    @PostMapping //Create, here we are using once again oauth2user id which we recently added
+    public ResponseEntity<Course> createCourse(@RequestBody Course course, @AuthenticationPrincipal OAuth2User oauth2User) {
         System.out.println("creating course");
-        Long userId = course.getUser().getId(); // Assuming the course object has user with id
-        User user = userService.findById(userId);
+        String oauth2UserId = oauth2User.getAttribute("sub");
+        User user = userService.findByOauth2Id(oauth2UserId);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // User not found
         }

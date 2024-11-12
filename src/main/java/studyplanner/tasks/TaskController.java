@@ -2,6 +2,8 @@ package studyplanner.tasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import studyplanner.courses.Course;
 import studyplanner.courses.CourseService;
@@ -23,8 +25,18 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getAllTasksForCourse(@PathVariable Long courseId) {
-        return taskService.getAllTasksForCourse(courseId);
+    public ResponseEntity<List<Task>> getAllTasksForCourse(@PathVariable Long courseId, @AuthenticationPrincipal OAuth2User oauth2User) {
+        String oauth2UserId = oauth2User.getAttribute("sub");
+        List<Course> courses = courseService.getAllCoursesByOauth2UserId(oauth2UserId);
+        List<Task> tasks = taskService.getAllTasksForCourse(courseId);
+        for (Course course : courses) {
+            if (course.getId().equals(courseId) && course.getUser().getOauth2UserId().equals(oauth2UserId)) {
+                System.out.println("User with OAuth2 ID: " + oauth2UserId + " accessed course with ID: " + course.getId()); // DO NOT use string template
+                System.out.println("Course id is" + courseId);
+                return ResponseEntity.ok(tasks);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @GetMapping("/{taskId}")
@@ -41,7 +53,7 @@ public class TaskController {
             Optional<Course> optionalCourse = courseService.getCourseById(courseId);
 
             if (optionalCourse.isPresent()) {
-                task.setCourse(optionalCourse.get());  // Extract Course from Optional and set
+                task.setCourse(optionalCourse.get());
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
@@ -53,7 +65,7 @@ public class TaskController {
         }
     }
 
-    @PutMapping // TO-DO FIX THIS
+    @PutMapping
     public ResponseEntity<List<Task>> updateTasks(@PathVariable Long courseId, @RequestBody List<Task> updatedTasks) {
         List<Task> existingTasks = taskService.getAllTasksForCourse(courseId);
         if (existingTasks.isEmpty()) {
@@ -66,10 +78,11 @@ public class TaskController {
                     .findFirst()
                     .ifPresent(existingTask -> {
                         existingTask.setTaskName(updatedTask.getTaskName());
+                        existingTask.setIsDone(updatedTask.getIsDone());
                         existingTask.setTaskDescription(updatedTask.getTaskDescription());
+                        existingTask.setDueDate((updatedTask.getDueDate()));
                     });
         });
-
         taskService.updateTasks(existingTasks);
 
         return ResponseEntity.ok(existingTasks);

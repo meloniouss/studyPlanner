@@ -13,7 +13,7 @@ public class User { //basically the values in the database
     private String email;
     private String name;
     @Column(name = "oauth2_user_id", unique = true)
-    private String oauth2UserId; // New field to store OAuth2 user ID
+    private String oauth2UserId;
 
     // Constructors, getters, setters
     public User(Long id, String email, String name, String oauth2UserId) {

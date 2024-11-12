@@ -18,6 +18,9 @@ public class UserService {
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null); // Returns null if not found
     }
+    public User findByOauth2Id(String id) {
+        return userRepository.findByOauth2UserId(id).orElse(null);
+    }
 
     public User findOrCreateUser(OAuth2User oauthUser) {
         try {

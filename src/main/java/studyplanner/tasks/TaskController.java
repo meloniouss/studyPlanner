@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import studyplanner.courses.Course;
 import studyplanner.courses.CourseService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 import studyplanner.user.User;
 
 @Entity
-@Table(name = "textEditors")
+@Table(name = "texteditors")
 public class TextEditor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @OneToOne

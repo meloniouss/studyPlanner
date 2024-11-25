@@ -45,9 +45,6 @@ public class CourseController {
     System.out.println("getting courses");
         String oauth2UserId = oauth2User.getAttribute("sub");
         List<Course> courses = courseService.getAllCoursesByOauth2UserId(oauth2UserId);
-        if (courses.isEmpty()) {
-            return ResponseEntity.noContent().build(); // No content found, it sends an OK request but that is it
-        }
         return ResponseEntity.ok(courses); //returns the list
     }
 
@@ -57,10 +54,18 @@ public class CourseController {
         return ResponseEntity.ok(course); // Return the updated course with a 200 OK status
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete")
     public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
-        courseService.deleteCourse(id);
-        return ResponseEntity.noContent().build(); // Return a 204 No Content status after deletion (doesnt display anything)
+        System.out.println("Deleting course " + id);
+        try {
+            courseService.deleteCourse(id);
+        }
+        catch(Exception e){
+            System.out.println(("Error occurred while deleting course with ID" + id + " : " + e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
+        }
+      return ResponseEntity.noContent().build(); // Return a 204 No Content status after deletion (doesnt display anything)
     }
 
 }

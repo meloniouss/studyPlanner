@@ -24,8 +24,9 @@ public class Task {
     @Column(name = "task_description")
     private String taskDescription;
 
+
     @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
+    @JoinColumn(name = "course_id", referencedColumnName = "id", nullable = false)
     private Course course;
 
     // Constructors

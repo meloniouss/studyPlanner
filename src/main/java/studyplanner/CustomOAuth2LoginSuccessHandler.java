@@ -53,7 +53,7 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * 24);
         response.addCookie(cookie);
-        response.sendRedirect("http://localhost:3000");
+        response.sendRedirect(System.getenv("FRONT-END-URL"));
     }
 
     public String generateToken(String userId, String userEmail, Long userIdNumber) {

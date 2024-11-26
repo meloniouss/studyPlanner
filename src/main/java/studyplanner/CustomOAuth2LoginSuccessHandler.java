@@ -52,8 +52,7 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * 24);
-        cookie.setAttribute("SameSite", "None");
-        cookie.setDomain("https://taskly-frontend-app.vercel.app");
+        cookie.setDomain("studyplanner-production.up.railway.app");
         response.addCookie(cookie);
         response.sendRedirect(System.getenv("FRONT-END-URL"));
     }

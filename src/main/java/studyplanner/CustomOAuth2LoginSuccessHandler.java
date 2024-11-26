@@ -49,7 +49,7 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         System.out.println(token);
         Cookie cookie = new Cookie("sessionToken", token);
         cookie.setHttpOnly(false);
-        cookie.setSecure(false);
+        cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * 24);
         response.addCookie(cookie);

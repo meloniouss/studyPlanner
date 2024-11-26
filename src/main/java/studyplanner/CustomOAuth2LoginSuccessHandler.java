@@ -52,6 +52,7 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * 24);
+        cookie.setAttribute("SameSite", "None");
         response.addCookie(cookie);
         response.sendRedirect(System.getenv("FRONT-END-URL"));
     }

@@ -35,9 +35,8 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@CrossOrigin("http://localhost:3000/")
+@CrossOrigin(origins = "https://taskly-frontend-app.vercel.app/")
 public class SecurityConfig {
-
     private final CustomOAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler;
 
     public SecurityConfig(CustomOAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler) {
@@ -84,7 +83,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList(System.getenv("FRONT-END-URL")));
+        configuration.setAllowedOrigins(Collections.singletonList("https://taskly-frontend-app.vercel.app/"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));

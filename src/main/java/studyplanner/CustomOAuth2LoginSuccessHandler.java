@@ -46,15 +46,15 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         System.out.println("Authentication successful! Redirecting to /otherpage.");
 
         String token = generateToken(currentUser.getName(), currentUser.getEmail(), currentUser.getId());
-        System.out.println(token);
         Cookie cookie = new Cookie("sessionToken", token);
-        cookie.setHttpOnly(false);
+        cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setMaxAge(60 * 60 * 24);
-        //response.addCookie(cookie);
-        response.addHeader("Set-Cookie", cookie.getName() + "=" + cookie.getValue() +
-                "; HttpOnly; Secure; SameSite=None; Path=" + cookie.getPath() + "; Max-Age=" + cookie.getMaxAge());
+        cookie.setMaxAge(60 * 60 * 24);  // 1 day
+        cookie.setDomain(".studyplanner-production.up.railway.app");
+        cookie.setAttribute("SameSite", "None");
+        response.addCookie(cookie);
+        System.out.println(response);
         response.sendRedirect(System.getenv("FRONT-END-URL"));
     }
 

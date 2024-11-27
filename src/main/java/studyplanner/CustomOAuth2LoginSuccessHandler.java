@@ -54,7 +54,10 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         cookie.setAttribute("SameSite", "None");
         response.addCookie(cookie);
         System.out.println(response);
+        response.setHeader("Set-Cookie", "sessionToken=" + token + "; HttpOnly; Secure; SameSite=None; Path=/; Max-Age=" + (60 * 60 * 24));
         response.sendRedirect(System.getenv("FRONT-END-URL"));
+
+
     }
 
     public String generateToken(String userId, String userEmail, Long userIdNumber) {

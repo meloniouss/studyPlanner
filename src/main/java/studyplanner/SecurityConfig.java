@@ -55,7 +55,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/auth/oauth",  "/login", "/oauth2/**").permitAll() // Allow public access to login and OAuth2 endpoints MAYBE DOUBLE CHECK IF THIS IS NECESSARY
+                        .requestMatchers("/", "/auth/oauth/**",  "/login", "/oauth2/authorization/**").permitAll() // Allow public access to login and OAuth2 endpoints MAYBE DOUBLE CHECK IF THIS IS NECESSARY
                         .requestMatchers("/courses", "/otherpage", "/logout", "/courses/**", "/courses/* /tasks", "/courses/{id}/delete", "/courses/* /tasks/**", "/calendar").authenticated()
                         .anyRequest().authenticated()
                 )

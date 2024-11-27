@@ -47,7 +47,7 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
 
         String token = generateToken(currentUser.getName(), currentUser.getEmail(), currentUser.getId());
         Cookie cookie = new Cookie("sessionToken", token);
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(false);
         cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * 24);  // 1 day

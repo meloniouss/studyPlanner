@@ -51,7 +51,6 @@ public class CustomOAuth2LoginSuccessHandler extends SavedRequestAwareAuthentica
         cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * 24);  // 1 day
-        cookie.setDomain(".studyplanner-production.up.railway.app");
         cookie.setAttribute("SameSite", "None");
         response.addCookie(cookie);
         System.out.println(response);
